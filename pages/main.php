@@ -34,23 +34,17 @@ if (!defined("IN_PASTE"))
       die("Access denied!");
       
 if (isset($_POST['submit'])){
-if (($_POST["txtCaptcha"] == $_SESSION["security_code"]) && (!empty($_POST["txtCaptcha"]) && !empty($_SESSION["security_code"])) ) {
-        if (!empty($_POST['paste'])){
-
-                if(empty($_POST['title'])) {
-                $title = 'Untitled';
-                } else {
-                $title = $_POST['title'];
-                }
-        $startUp->addPaste($userId,$title,$_POST['syntax'],$_POST['paste'],$_POST['expiration'],$_POST['exposure']); 
-
+    if (!empty($_POST['paste'])){
+        if(empty($_POST['title'])) {
+            $title = 'Untitled';
         } else {
-        $smarty->assign("errorPaste",'1');               
-            }
-        } else {
-        $smarty->assign("errorCaptcha",'1');
+            $title = $_POST['title'];
         }
-}  
+        $startUp->addPaste($userId,$title,$_POST['syntax'],$_POST['paste'],$_POST['expiration'],$_POST['exposure']); 
+    } else {
+        $smarty->assign("errorPaste",'1');               
+    }
+}
 
 $smarty->assign("getLangs",$startUp->getLangs()); 
  
@@ -58,7 +52,6 @@ $hook->set_title('home_title', $lang["titlehome"]);
 $hook->add_block('pasteForm', '', '',740,10); 
 $hook->add_block('pasteOptions', '', '',740,11);  
 $hook->add_block('pasteName', '', '',740,12);   
-$hook->addJs('Captcha','ajax_captcha.js','libs/captcha/','5'); 
 
 if ($hook->hook_exist('home_page'))  
 	$hook->execute_hook('home_page');
